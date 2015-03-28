@@ -23,8 +23,9 @@ public class MinesweeperGui extends JFrame
 	MinesweeperGui()
 	{
 		super("Minesweeper");
+		setSize(new Dimension(680, 420));
 		setMinimumSize(new Dimension(400, 400));
-		this.setSize(640, 480);
+		//this.setSize(640, 480);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -51,15 +52,15 @@ public class MinesweeperGui extends JFrame
 		mnHelp.add(mntmAbout);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("75px:grow"),
-				ColumnSpec.decode("center:40px"),
-				ColumnSpec.decode("75px:grow"),
+				ColumnSpec.decode("300px:grow"),
+				ColumnSpec.decode("center:40px:grow"),
+				ColumnSpec.decode("300px"),
 				FormFactory.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("40px"),
 				FormFactory.LINE_GAP_ROWSPEC,
-				RowSpec.decode("default:grow"),
+				RowSpec.decode("300px"),
 				FormFactory.RELATED_GAP_ROWSPEC,}));
 		
 		
