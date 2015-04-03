@@ -1,7 +1,7 @@
 package minesweeper;
 
 public class Cell
-// YOLO
+// YOLO 
 {
 	public static final int BOMB = 0xB;
 	
