@@ -1,9 +1,7 @@
 package minesweeper;
 
 public class Cell
-// One does not simply: Java
 {
-	// First comment
 	public static final int BOMB = 0xB;
 	
 	private CellState cellState;
