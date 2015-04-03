@@ -1,7 +1,7 @@
 package minesweeper;
 
 public class Cell
-// YOLO 
+// One does not simply: Java
 {
 	public static final int BOMB = 0xB;
 	
