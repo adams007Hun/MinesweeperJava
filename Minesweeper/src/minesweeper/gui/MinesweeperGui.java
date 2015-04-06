@@ -1,18 +1,24 @@
-package minesweeper;
+package minesweeper.gui;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
+
 import java.awt.Dimension;
+
 import javax.swing.JPanel;
 
 public class MinesweeperGui extends JFrame
@@ -20,7 +26,7 @@ public class MinesweeperGui extends JFrame
 
 	private static final long serialVersionUID = 1L;
 	
-	MinesweeperGui()
+	public MinesweeperGui()
 	{
 		super("Minesweeper");
 		setSize(new Dimension(680, 420));
@@ -100,11 +106,11 @@ public class MinesweeperGui extends JFrame
 		panel.add(labelEnemy, "7, 1");
 		labelEnemy.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		
-		MineBoard myBoard = new MineBoard();
+		MineBoardPanel myBoard = new MineBoardPanel();
 		myBoard.setPreferredSize(new Dimension(495, 230));
 		getContentPane().add(myBoard, "2, 4, fill, fill");
 		
-		MineBoard enemyBoard = new MineBoard();
+		MineBoardPanel enemyBoard = new MineBoardPanel();
 		enemyBoard.setPreferredSize(new Dimension(495, 230));
 		getContentPane().add(enemyBoard, "4, 4, fill, fill");
 		

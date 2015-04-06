@@ -1,10 +1,10 @@
-package minesweeper;
+package minesweeper.gui;
 
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 
-public class MineBoard extends JPanel
+public class MineBoardPanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 
@@ -13,7 +13,7 @@ public class MineBoard extends JPanel
 
 	private MineButton mineField[][];
 	
-	public MineBoard()
+	public MineBoardPanel()
 	{
 		super(new GridLayout(rows, columns, 0,0));
 		mineField = new MineButton[rows][columns];

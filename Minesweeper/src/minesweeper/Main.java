@@ -1,5 +1,7 @@
 package minesweeper;
 
+import minesweeper.gui.MinesweeperGui;
+
 
 public class Main
 {
