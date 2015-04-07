@@ -21,14 +21,20 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
+import minesweeper.Board;
+
 public class MinesweeperGui extends JFrame
 {
 
 	private static final long serialVersionUID = 1L;
+	private Board boardModel;
 	
-	public MinesweeperGui()
+	public MinesweeperGui(Board boardModel)
 	{
 		super("Minesweeper");
+		
+		this.boardModel = boardModel;
+		
 		setSize(new Dimension(680, 420));
 		setMinimumSize(new Dimension(400, 400));
 		//this.setSize(640, 480);
@@ -109,6 +115,15 @@ public class MinesweeperGui extends JFrame
 		MineBoardPanel myBoard = new MineBoardPanel();
 		myBoard.setPreferredSize(new Dimension(495, 230));
 		getContentPane().add(myBoard, "2, 4, fill, fill");
+		myBoard.setBoardChangedListener(new BoardChangedListener()
+		{
+			
+			@Override
+			public void boardClicked(BoardChangedEvent e) {
+				boardModel.reveal(e.getRow(), e.getColumn());
+				boardModel.Display();
+			}
+		});
 		
 		MineBoardPanel enemyBoard = new MineBoardPanel();
 		enemyBoard.setPreferredSize(new Dimension(495, 230));

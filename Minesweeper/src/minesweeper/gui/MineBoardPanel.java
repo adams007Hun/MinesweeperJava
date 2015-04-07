@@ -1,8 +1,13 @@
 package minesweeper.gui;
 
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
+
+import minesweeper.Cell;
+import minesweeper.CellState;
 
 public class MineBoardPanel extends JPanel
 {
@@ -12,6 +17,8 @@ public class MineBoardPanel extends JPanel
 	private static int columns = 15;
 
 	private MineButton mineField[][];
+	
+	private BoardChangedListener boardChangedListener;
 	
 	public MineBoardPanel()
 	{
@@ -24,8 +31,40 @@ public class MineBoardPanel extends JPanel
 			for (int j = 0; j < columns; j++)
 			{
 				mineField[i][j] = new MineButton();
+				mineField[i][j].addMouseListener(new MouseHandler(i,j));
 				add(mineField[i][j]);
 			}
 		}
+	}
+
+	public void setBoardChangedListener(BoardChangedListener boardChangedListener) {
+		this.boardChangedListener = boardChangedListener;
+	}
+	
+	private void processBoardChangedEvent(BoardChangedEvent e)
+	{
+		if (boardChangedListener != null)
+		{
+			boardChangedListener.boardClicked(e);
+		}
+	}
+
+	private class MouseHandler extends MouseAdapter
+	{
+		private int r,c;
+		public MouseHandler(int r, int c)
+	    {
+	        this.r = r;
+	        this.c = c;
+	    }
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			super.mouseClicked(e);
+			System.out.print(r + " " + c + "\n");
+			((MineButton)e.getSource()).updateButton(new Cell(CellState.Clicked,Cell.BOMB));
+			processBoardChangedEvent(new BoardChangedEvent(this, r, c));
+		}
+		
 	}
 }

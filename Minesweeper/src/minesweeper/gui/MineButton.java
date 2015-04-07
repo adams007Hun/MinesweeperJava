@@ -1,5 +1,7 @@
 package minesweeper.gui;
 
+import java.awt.Insets;
+
 import javax.swing.JButton;
 
 import minesweeper.Cell;
@@ -14,8 +16,13 @@ public class MineButton extends JButton
 		super();
 		this.setText("");
 		this.setSize(20, 20);
+		this.setMargin(new Insets(0,0,0,0));
 	}
 	
+	/**
+	 * 
+	 * @param cell
+	 */
 	public void updateButton(Cell cell)
 	{
 		switch (cell.getCellState())
@@ -24,7 +31,11 @@ public class MineButton extends JButton
 				this.setText("");
 				break;
 			case Clicked:
-				this.setText(String.valueOf(cell.getCellValue()));
+				if(cell.getCellValue() == Cell.BOMB)
+					this.setText("M");
+				else
+					this.setText(String.valueOf(cell.getCellValue()));
+				this.setEnabled(false);
 				break;
 			case Flagged:
 				this.setText("#");

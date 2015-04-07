@@ -7,8 +7,9 @@ public class Main
 {
 	public static void main(String[] args)
 	{
-		//MinesweeperGui gui = new MinesweeperGui();
-		Board board = new Board(4,5,3,0,0);
+		Board board = new Board(15,15,40,0,0);
+		MinesweeperGui gui = new MinesweeperGui(board);
+		
 		board.Display();
 		System.out.println("Az ismeretle mezõk száma: " + board.getNumUnknown() );
 		
