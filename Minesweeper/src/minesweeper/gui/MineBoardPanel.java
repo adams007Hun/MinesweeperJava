@@ -6,8 +6,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
-import minesweeper.Cell;
-import minesweeper.CellState;
+import minesweeper.Board;
 
 public class MineBoardPanel extends JPanel
 {
@@ -17,9 +16,13 @@ public class MineBoardPanel extends JPanel
 	private static int columns = 15;
 
 	private MineButton mineField[][];
+	private Board board;
 	
-	private BoardChangedListener boardChangedListener;
 	
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
 	public MineBoardPanel()
 	{
 		super(new GridLayout(rows, columns, 0,0));
@@ -37,18 +40,6 @@ public class MineBoardPanel extends JPanel
 		}
 	}
 
-	public void setBoardChangedListener(BoardChangedListener boardChangedListener) {
-		this.boardChangedListener = boardChangedListener;
-	}
-	
-	private void processBoardChangedEvent(BoardChangedEvent e)
-	{
-		if (boardChangedListener != null)
-		{
-			boardChangedListener.boardClicked(e);
-		}
-	}
-
 	private class MouseHandler extends MouseAdapter
 	{
 		private int r,c;
@@ -62,8 +53,8 @@ public class MineBoardPanel extends JPanel
 		public void mouseClicked(MouseEvent e) {
 			super.mouseClicked(e);
 			System.out.print(r + " " + c + "\n");
-			((MineButton)e.getSource()).updateButton(new Cell(CellState.Clicked,Cell.BOMB));
-			processBoardChangedEvent(new BoardChangedEvent(this, r, c));
+			board.reveal(r, c);
+			//((MineButton)e.getSource()).updateButton(new Cell(CellState.Clicked,Cell.BOMB));
 		}
 		
 	}
