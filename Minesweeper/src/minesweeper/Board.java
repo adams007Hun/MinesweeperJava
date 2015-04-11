@@ -5,8 +5,11 @@ import java.util.Random;
 public class Board{
 	public static final int BOMB = 0xB;
 	
-	//Detect the first click
+	// Detect the first click
 	boolean isFirstClick;
+	
+	// Detect the win or lose
+	boolean win, defeat;
 	
 	// Board size
 	private int row,column;
@@ -17,8 +20,7 @@ public class Board{
 	// Number of mines, flagged, hidden
 	private int numMines;
 	private int numFlagged;
-	
-	
+	private int numHidden;
 	
 	/*   */
 	public Board(int row, int column, int numMines){
@@ -27,6 +29,7 @@ public class Board{
 		this.column = column;
 		this.numMines = numMines;
 		this.numFlagged = 0;
+		this.numHidden = row * column;
 		
 		
 		// Allocate storage for game board
@@ -38,11 +41,10 @@ public class Board{
 	    		cells[i][j] = new Cell(CellState.Hidden, 0);
 	    	}
 	    }
-	       
 		// a values automatikusan 0 lesz..
 	    this.isFirstClick = true;
-	    
-		
+	    this.win = false; 
+	    this.defeat = false;
 	}
 	
 	private void fillValues(){
@@ -106,7 +108,6 @@ public class Board{
 	}
 	
 
-
 	/* Change the state of the cell, and reveal recursively */
 	public void reveal(int row, int column){
 				
@@ -116,14 +117,42 @@ public class Board{
 			this.isFirstClick = false;
 		}
 		
+		if(this.cells[row][column].getCellValue() == BOMB){
+			this.cells[row][column].setCellState(CellState.Clicked);
+			this.defeat = true;
+			return;
+		}
 		
-		int minrow, mincolumn, maxrow, maxcolumn;
+		this.revealMore(row, column);
 		
+		this.updateNumHidden();
 		
+		if(this.numHidden == this.numMines){
+			this.win = true;
+		}
+		
+		return;
+	}
+	
+	private void updateNumHidden(){
+		int num = 0;
+		
+		for(int i = 0; i < cells.length; i++){
+	    	for(int j = 0; j < cells[i].length; j++){
+	    		if (cells[i][j].getCellState() == CellState.Hidden)
+	    			num++;
+	     	}
+	    }
+		this.numHidden = num;
+		return;
+	}
+	
+	private void revealMore(int row, int column){
 		if( this.cells[row][column].getCellValue() != 0 ){
 			cells[row][column].setCellState(CellState.Clicked);
 			return;
 		}
+		int minrow, mincolumn, maxrow, maxcolumn;
 		
 		// Edges
 		minrow = ( row <= 0 ? 0 : row-1 );
@@ -136,14 +165,13 @@ public class Board{
 			for(int j = mincolumn; j<=maxcolumn;j++){
 				if(this.cells[i][j].getCellState() == CellState.Hidden ){
 					this.cells[i][j].setCellState(CellState.Clicked);
-					reveal(i,j);
+					revealMore(i,j);
 				}
 			}
 		}
-		
+		return;
 	}
 
-	
 	public void flag(int row, int column){
 		// Change the state to flagged
 		cells[row][column].setCellState(CellState.Flagged);
@@ -156,7 +184,6 @@ public class Board{
 		numFlagged--;
 	}
 
-	
 	public void Display(){
 		// Display the board 
 		int i,j;
@@ -212,8 +239,21 @@ public class Board{
 	public void setNumFlagged(int numFlagged) {
 		this.numFlagged = numFlagged;
 	}
+	public int getNumHidden(){
+		return this.numHidden;
+	}
+	public void setNumHidden(int numHidden){
+		this.numHidden = numHidden;
+	}
 
 	/*---------------------------*/
+	/* Win - Defeat getter */
 	
+	public boolean getWin(){
+		return this.win;
+	}
+	public boolean getDefeat(){
+		return this.defeat;
+	}
 	
 }
