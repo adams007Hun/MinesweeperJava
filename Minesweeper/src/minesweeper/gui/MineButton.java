@@ -6,6 +6,8 @@ import javax.swing.JButton;
 
 import minesweeper.Cell;
 
+// MineButton is the graphical implementation of a single tile of the board.
+// It is basically a JButton with a few extra features.
 public class MineButton extends JButton
 {
 	private static final long serialVersionUID = 1L;
@@ -20,8 +22,9 @@ public class MineButton extends JButton
 	}
 	
 	/**
-	 * 
-	 * @param cell
+	 * The method updateButton sets the text on the button based on 
+	 * the given parameter
+	 * @param cell: the cell to be displayed
 	 */
 	public void updateButton(Cell cell)
 	{

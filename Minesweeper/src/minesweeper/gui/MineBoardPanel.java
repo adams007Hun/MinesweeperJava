@@ -7,6 +7,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 
 import minesweeper.Board;
+import minesweeper.Cell;
+import minesweeper.CellState;
+
 
 public class MineBoardPanel extends JPanel
 {
@@ -52,9 +55,24 @@ public class MineBoardPanel extends JPanel
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			super.mouseClicked(e);
-			System.out.print(r + " " + c + "\n");
-			board.reveal(r, c);
-			//((MineButton)e.getSource()).updateButton(new Cell(CellState.Clicked,Cell.BOMB));
+			if (e.getButton() == MouseEvent.BUTTON3)
+			{
+				board.flag(r, c);
+				((MineButton)e.getSource()).updateButton(new Cell(CellState.Flagged, Cell.BOMB));
+			}
+			else
+			{
+				// Debug only message
+				//System.out.print(r + " " + c + "\n");
+				board.reveal(r, c);
+				for (int i = 0; i < rows; i++)
+				{
+					for (int j = 0; j < columns; j++)
+					{
+						mineField[i][j].updateButton(board.getCells()[i][j]);
+					}
+				}
+			}
 		}
 		
 	}
