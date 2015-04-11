@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import minesweeper.Board;
@@ -71,6 +72,14 @@ public class MineBoardPanel extends JPanel
 					{
 						mineField[i][j].updateButton(board.getCells()[i][j]);
 					}
+				}
+				if (board.getWin())
+				{
+					JOptionPane.showMessageDialog(null, "You win the game! :)");
+				}
+				else if (board.getDefeat())
+				{
+					JOptionPane.showMessageDialog(null, "You lost the game! :(");
 				}
 			}
 		}
