@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -21,7 +22,6 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
-import minesweeper.Board;
 import minesweeper.Control;
 
 public class MinesweeperGui extends JFrame
@@ -48,10 +48,18 @@ public class MinesweeperGui extends JFrame
 		menuBar.add(mnGame);
 		
 		JMenuItem mntmNewGame = new JMenuItem("New game...");
+		mntmNewGame.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				NewGameDialog nd = new NewGameDialog(null);
+				nd.setVisible(true);
+			}
+		});
 		mnGame.add(mntmNewGame);
 		
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
@@ -62,6 +70,13 @@ public class MinesweeperGui extends JFrame
 		menuBar.add(mnHelp);
 		
 		JMenuItem mntmAbout = new JMenuItem("About");
+		mntmAbout.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Minesweeper v0.5\n  ---Developers---  "
+						+ "\n Bányai Tamás\nDobiás Zoltán\nVirovecz Ádám");
+			}
+		});
 		mnHelp.add(mntmAbout);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
@@ -116,13 +131,12 @@ public class MinesweeperGui extends JFrame
 		MineBoardPanel myBoard = new MineBoardPanel();
 		myBoard.setPreferredSize(new Dimension(495, 230));
 		getContentPane().add(myBoard, "2, 4, fill, fill");
-		// TODO setBoard
-		//myBoard.setBoard();
+		myBoard.setBoard(ctrl.getLocalBoard());
 		
 		MineBoardPanel enemyBoard = new MineBoardPanel();
 		enemyBoard.setPreferredSize(new Dimension(495, 230));
 		getContentPane().add(enemyBoard, "4, 4, fill, fill");
-		// TODO setBoard
+		enemyBoard.setBoard(ctrl.getRemoteBoard());
 		
 		this.setVisible(true);
 	}

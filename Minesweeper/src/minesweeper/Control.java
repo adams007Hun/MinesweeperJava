@@ -3,14 +3,28 @@ package minesweeper;
 import minesweeper.gui.MinesweeperGui;
 
 public class Control
-{
+{	
 	private Network net;
 	private MinesweeperGui gui;
+	
+	private Board localBoard;
+	private Board remoteBoard;
+	
+	private static final int size = 15;
+	int mineCount = 40; // TODO: set from GUI
 
 	public Control()
 	{
-		// TODO BoardA BoardB
-		// ...
+		localBoard = new Board(size, size, mineCount);
+		remoteBoard = new Board(size, size, mineCount);
+	}
+	
+	public Board getLocalBoard() {
+		return localBoard;
+	}
+
+	public Board getRemoteBoard() {
+		return remoteBoard;
 	}
 	
 	void setGUI(MinesweeperGui g) {

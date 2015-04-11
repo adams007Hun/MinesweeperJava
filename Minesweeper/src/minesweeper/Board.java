@@ -17,6 +17,13 @@ public class Board{
 	// The board
 	private Cell [][] cells;
 	
+	// Ádám -- Debug
+	//---------------
+	public Cell[][] getCells() {
+		return cells;
+	}
+	//---------------
+	
 	// Number of mines, flagged, hidden
 	private int numMines;
 	private int numFlagged;
