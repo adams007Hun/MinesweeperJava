@@ -9,6 +9,7 @@ public class Main
 	{
 		Control c = new Control();
 		MinesweeperGui gui = new MinesweeperGui(c);
+		
 	}
 
 }

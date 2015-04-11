@@ -5,6 +5,9 @@ import java.util.Random;
 public class Board{
 	public static final int BOMB = 0xB;
 	
+	//Detect the first click
+	boolean isFirstClick;
+	
 	// Board size
 	private int row,column;
 	
@@ -14,17 +17,17 @@ public class Board{
 	// Number of mines, flagged, hidden
 	private int numMines;
 	private int numFlagged;
-	private int numHidden;
+	
 	
 	
 	/*   */
-	public Board(int row, int column, int numMines, int firstRow, int firstColumn){
+	public Board(int row, int column, int numMines){
 		// firstRow/Column can't be mine
 		this.row = row;
 		this.column = column;
 		this.numMines = numMines;
 		this.numFlagged = 0;
-		this.numHidden = row * column;
+		
 		
 		// Allocate storage for game board
 		// CellValue = 0, CellState = Hidden to all cell
@@ -35,15 +38,10 @@ public class Board{
 	    		cells[i][j] = new Cell(CellState.Hidden, 0);
 	    	}
 	    }
-		
-		this.genMines(firstRow, firstColumn);
+	       
+		// a values automatikusan 0 lesz..
+	    this.isFirstClick = true;
 	    
-		// Fill Values
-		this.fillValues();
-		
-		// Set state to clicked
-		this.reveal(firstRow, firstColumn);
-		this.updateNumHidden();
 		
 	}
 	
@@ -107,20 +105,18 @@ public class Board{
 		}
 	}
 	
-	private void updateNumHidden(){
-		
-		for(int i=0; i<this.row;i++){
-			for(int j=0; j<this.column;j++){
-				if(this.cells[i][j].getCellState() != CellState.Hidden)
-					this.numHidden--;
-			}
-		}
-		
-		
-	}
+
 
 	/* Change the state of the cell, and reveal recursively */
 	public void reveal(int row, int column){
+				
+		if(this.isFirstClick){
+			this.genMines(row, column);
+			this.fillValues();
+			this.isFirstClick = false;
+		}
+		
+		
 		int minrow, mincolumn, maxrow, maxcolumn;
 		
 		
@@ -216,12 +212,7 @@ public class Board{
 	public void setNumFlagged(int numFlagged) {
 		this.numFlagged = numFlagged;
 	}
-	public int getNumUnknown() {
-		return numHidden;
-	}
-	public void setNumUnknown(int numUnknown) {
-		this.numHidden = numUnknown;
-	}
+
 	/*---------------------------*/
 	
 	
