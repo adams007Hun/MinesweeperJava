@@ -43,8 +43,8 @@ public class SerialServer extends Network{
 
 			try {
 				while (true) {
-					String received = (String) in.readObject();		/*TODO ne stringküldés hanem board*/
-					ctrl.boardReceived(received);					/*TODO ne stringküldés hanem board*/
+					Board received = (Board) in.readObject();
+					ctrl.boardReceived(received);
 				}
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
@@ -69,12 +69,12 @@ public class SerialServer extends Network{
 	}
 
 	@Override
-	void sendBoard(String message) {								/*TODO ne stringküldés hanem board*/
+	void sendBoard(Board messageBoard) {
 		if (out == null)
 			return;
-		System.out.println("Sending: " + message + " to Client");	/*TODO ne stringküldés hanem board*/
+		System.out.println("Sending a board to Client");
 		try {
-			out.writeObject(message);								/*TODO ne stringküldés hanem board*/
+			out.writeObject(messageBoard);
 			out.flush();
 		} catch (IOException ex) {
 			System.err.println("Send error.");

@@ -11,6 +11,6 @@ abstract class Network {
 
 	abstract void disconnect();
 
-	abstract void sendBoard(String message);		/*TODO ne stringküldés hanem board*/
+	abstract void sendBoard(Board messageBoard);
 
 }

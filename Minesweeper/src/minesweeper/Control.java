@@ -45,17 +45,16 @@ public class Control
 		net.connect("localhost");
 	}
 
-	void sendBoard(String message) {				/*TODO ne stringküldés hanem board*/
-		// gui.addPoint(p); //for drawing locally
+	void sendBoard(Board sendableBoard) {
 		if (net == null)
 			return;
-		net.sendBoard(message);						/*TODO ne stringküldés hanem board*/
+		net.sendBoard(sendableBoard);
 	}
 
-	void boardReceived(String message) {
+	void boardReceived(Board receivedBoard) {
 		if (gui == null)
 			return;
-													/*TODO GUI kirajzol*/
+		System.out.println("Jipyyyy new board came, so fluffy");	/*TODO GUI kirajzol*/
 	}
 
 }

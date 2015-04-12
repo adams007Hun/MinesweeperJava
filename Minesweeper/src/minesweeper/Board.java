@@ -1,8 +1,12 @@
 package minesweeper;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Board{
+public class Board implements Serializable{
+	//Auto generated serializing ID
+	private static final long serialVersionUID = 3074637006192374138L;
+
 	public static final int BOMB = 0xB;
 	
 	// Detect the first click

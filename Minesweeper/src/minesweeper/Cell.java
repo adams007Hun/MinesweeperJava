@@ -1,7 +1,12 @@
 package minesweeper;
 
-public class Cell
+import java.io.Serializable;
+
+public class Cell implements Serializable
 {
+	//+1 version to the board number
+	private static final long serialVersionUID = 3074637006192374139L;
+
 	public static final int BOMB = 0xB;
 	
 	private CellState cellState;
