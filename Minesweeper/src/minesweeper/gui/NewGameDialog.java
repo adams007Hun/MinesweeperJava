@@ -13,18 +13,27 @@ import javax.swing.JLabel;
 
 import java.awt.Font;
 
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.WindowConstants;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NewGameDialog extends JDialog
 {
+	private static final long serialVersionUID = 1L;
 	private JTextField textField;
+	private JButton btnConnectToServer;
+	
+	private static final String IPV4PATTERN = "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+	
 	public NewGameDialog(Frame frame)
 	{
 		// Create a new dialog with the given title, and set the modality to true
@@ -96,8 +105,33 @@ public class NewGameDialog extends JDialog
 		JButton btnStartServer = new JButton("Start server...");
 		getContentPane().add(btnStartServer, "2, 16");
 		
-		JButton btnConnectToServer = new JButton("Connect to server");
+		btnConnectToServer = new JButton("Connect to server");
 		getContentPane().add(btnConnectToServer, "4, 16");
-		// TODO Auto-generated constructor stub
+		
+		btnConnectToServer.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Pattern pattern = Pattern.compile(IPV4PATTERN);
+			    Matcher matcher = pattern.matcher(textField.getText());
+			    if (matcher.matches()) // TODO Connect client
+			    	dispose();
+			    else
+			    	JOptionPane.showMessageDialog(null, "Please enter a correct IPv4 address!");
+				
+			}
+		});
+
+		btnStartServer.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Start server
+				dispose();
+			}
+		});
 	}
+	
 }

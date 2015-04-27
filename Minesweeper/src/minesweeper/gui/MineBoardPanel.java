@@ -27,7 +27,7 @@ public class MineBoardPanel extends JPanel
 		this.board = board;
 	}
 
-	public MineBoardPanel()
+	public MineBoardPanel(boolean playable)
 	{
 		super(new GridLayout(rows, columns, 0,0));
 		mineField = new MineButton[rows][columns];
@@ -38,7 +38,8 @@ public class MineBoardPanel extends JPanel
 			for (int j = 0; j < columns; j++)
 			{
 				mineField[i][j] = new MineButton();
-				mineField[i][j].addMouseListener(new MouseHandler(i,j));
+				if (playable)
+					mineField[i][j].addMouseListener(new MouseHandler(i,j));
 				add(mineField[i][j]);
 			}
 		}
@@ -56,30 +57,39 @@ public class MineBoardPanel extends JPanel
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			super.mouseClicked(e);
+			Cell clickedCell = board.getCellAt(r,c);
 			if (e.getButton() == MouseEvent.BUTTON3)
 			{
-				board.flag(r, c);
-				((MineButton)e.getSource()).updateButton(new Cell(CellState.Flagged, Cell.BOMB));
+				if (clickedCell.getCellState() == CellState.Hidden) {
+					board.flag(r, c);
+					((MineButton)e.getSource()).updateButton(clickedCell);
+				}
+				else if (clickedCell.getCellState() == CellState.Flagged) {
+					board.unFlag(r,c);
+					((MineButton)e.getSource()).updateButton(clickedCell);
+				}
 			}
 			else
 			{
 				// Debug only message
 				//System.out.print(r + " " + c + "\n");
-				board.reveal(r, c);
-				for (int i = 0; i < rows; i++)
-				{
-					for (int j = 0; j < columns; j++)
+				if (clickedCell.getCellState() == CellState.Hidden) {
+					board.reveal(r, c);
+					for (int i = 0; i < rows; i++)
 					{
-						mineField[i][j].updateButton(board.getCells()[i][j]);
+						for (int j = 0; j < columns; j++)
+						{
+							mineField[i][j].updateButton(board.getCells()[i][j]);
+						}
 					}
-				}
-				if (board.getWin())
-				{
-					JOptionPane.showMessageDialog(null, "You win the game! :)");
-				}
-				else if (board.getDefeat())
-				{
-					JOptionPane.showMessageDialog(null, "You lost the game! :(");
+					if (board.getWin())
+					{
+						JOptionPane.showMessageDialog(null, "You win the game! :)");
+					}
+					else if (board.getDefeat())
+					{
+						JOptionPane.showMessageDialog(null, "You lost the game! :(");
+					}
 				}
 			}
 		}

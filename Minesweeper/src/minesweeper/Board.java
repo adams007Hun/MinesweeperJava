@@ -26,6 +26,10 @@ public class Board implements Serializable{
 	public Cell[][] getCells() {
 		return cells;
 	}
+	
+	public Cell getCellAt(int row, int column) {
+		return cells[row][column];
+	}
 	//---------------
 	
 	// Number of mines, flagged, hidden

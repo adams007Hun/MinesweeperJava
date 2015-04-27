@@ -5,6 +5,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -29,12 +30,13 @@ public class MinesweeperGui extends JFrame
 
 	private static final long serialVersionUID = 1L;
 	private Control ctrl;
+	private int gameTime; // in seconds
 	
-	public MinesweeperGui(Control ctrl)
+	public MinesweeperGui(Control _ctrl)
 	{
 		super("Minesweeper");
 		
-		this.ctrl = ctrl;
+		this.ctrl = _ctrl;
 		
 		setSize(new Dimension(680, 420));
 		setMinimumSize(new Dimension(400, 400));
@@ -128,15 +130,28 @@ public class MinesweeperGui extends JFrame
 		panel.add(labelEnemy, "7, 1");
 		labelEnemy.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		
-		MineBoardPanel myBoard = new MineBoardPanel();
+		MineBoardPanel myBoard = new MineBoardPanel(true);
 		myBoard.setPreferredSize(new Dimension(495, 230));
 		getContentPane().add(myBoard, "2, 4, fill, fill");
 		myBoard.setBoard(ctrl.getLocalBoard());
 		
-		MineBoardPanel enemyBoard = new MineBoardPanel();
+		MineBoardPanel enemyBoard = new MineBoardPanel(false);
 		enemyBoard.setPreferredSize(new Dimension(495, 230));
 		getContentPane().add(enemyBoard, "4, 4, fill, fill");
 		enemyBoard.setBoard(ctrl.getRemoteBoard());
+		
+		Timer gameTimer = new Timer(1000, new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gameTime++;
+				
+				globalTimer.setText(String.format("%02d:%02d", gameTime/60, gameTime%60));
+				
+			}
+		});
+		gameTimer.start();
 		
 		this.setVisible(true);
 	}
