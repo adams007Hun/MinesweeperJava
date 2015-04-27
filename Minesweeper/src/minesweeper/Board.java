@@ -142,7 +142,7 @@ public class Board implements Serializable{
 		
 		this.updateNumHidden();
 		
-		if(this.numHidden == this.numMines){
+		if( (this.numHidden+this.numFlagged) == this.numMines ){
 			this.win = true;
 		}
 		
@@ -154,7 +154,7 @@ public class Board implements Serializable{
 		
 		for(int i = 0; i < cells.length; i++){
 	    	for(int j = 0; j < cells[i].length; j++){
-	    		if (cells[i][j].getCellState() == CellState.Hidden)
+	    		if ( cells[i][j].getCellState() == CellState.Hidden )
 	    			num++;
 	     	}
 	    }
