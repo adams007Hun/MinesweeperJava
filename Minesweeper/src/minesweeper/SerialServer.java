@@ -22,11 +22,11 @@ public class SerialServer extends Network{
 
 		public void run() {
 			try {
-				System.out.println("Waiting for Client");
+				System.out.println("SERVER: Waiting for Client");
 				clientSocket = serverSocket.accept();
-				System.out.println("Client connected.");
+				System.out.println("SERVER: Client connected.");
 			} catch (IOException e) {
-				System.err.println("Accept failed.");
+				System.err.println("SERVER: Accept failed.");
 				disconnect();
 				return;
 			}
@@ -36,7 +36,7 @@ public class SerialServer extends Network{
 				in = new ObjectInputStream(clientSocket.getInputStream());
 				out.flush();
 			} catch (IOException e) {
-				System.err.println("Error while getting streams.");
+				System.err.println("SERVER: Error while getting streams.");
 				disconnect();
 				return;
 			}
@@ -48,7 +48,7 @@ public class SerialServer extends Network{
 				}
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
-				System.err.println("Client disconnected!");
+				System.err.println("SERVER: Client disconnected!");
 			} finally {
 				disconnect();
 			}
@@ -64,7 +64,7 @@ public class SerialServer extends Network{
 			Thread rec = new Thread(new ReceiverThread());
 			rec.start();
 		} catch (IOException e) {
-			System.err.println("Could not listen on port: 10007.");
+			System.err.println("SERVER: Could not listen on port: 10007.");
 		}
 	}
 
@@ -72,12 +72,13 @@ public class SerialServer extends Network{
 	void sendBoard(Board messageBoard) {
 		if (out == null)
 			return;
-		System.out.println("Sending a board to Client");
+		System.out.println("SERVER: Sending a board to Client");
 		try {
 			out.writeObject(messageBoard);
 			out.flush();
+			out.reset();
 		} catch (IOException ex) {
-			System.err.println("Send error.");
+			System.err.println("SERVER: Send error.");
 		}
 	}
 

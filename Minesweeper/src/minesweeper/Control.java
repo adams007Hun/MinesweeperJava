@@ -43,16 +43,14 @@ public class Control
 	public void sendBoard(Board sendableBoard) {
 		if (net == null)
 			return;
-		sendableBoard.Display();
 		net.sendBoard(sendableBoard);
 	}
 
 	public void boardReceived(Board receivedBoard) {
 		if (gui == null)
 			return;
-		receivedBoard.Display();
 		gui.updateRemoteBoard(receivedBoard);
-		System.out.println("Jipyyyy new board came, so fluffy");	/*TODO GUI kirajzol*/
+		System.out.println("Jipyyyy new board came, so fluffy");
 	}
 
 }

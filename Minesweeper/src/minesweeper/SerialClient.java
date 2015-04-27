@@ -21,7 +21,7 @@ public class SerialClient extends Network{
 	private class ReceiverThread implements Runnable {
 
 		public void run() {
-			System.out.println("Waiting for message...");
+			System.out.println("CLIENT: Waiting for message...");
 			try {
 				while (true) {
 					Board received = (Board) in.readObject();
@@ -29,7 +29,7 @@ public class SerialClient extends Network{
 				}
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
-				System.err.println("Server disconnected!");
+				System.err.println("CLIENT: Server disconnected!");
 			} finally {
 				disconnect();
 			}
@@ -49,10 +49,10 @@ public class SerialClient extends Network{
 			Thread rec = new Thread(new ReceiverThread());
 			rec.start();
 		} catch (UnknownHostException e) {
-			System.err.println("Don't know about host");
+			System.err.println("CLIENT: Don't know about host");
 		} catch (IOException e) {
-			System.err.println("Couldn't get I/O for the connection. ");
-			JOptionPane.showMessageDialog(null, "Cannot connect to server!");
+			System.err.println("CLIENT: Couldn't get I/O for the connection. ");
+			JOptionPane.showMessageDialog(null, "CLIENT: Cannot connect to server!");
 		}
 	}
 
@@ -60,12 +60,13 @@ public class SerialClient extends Network{
 	void sendBoard(Board messageBoard) {
 		if (out == null)
 			return;
-		System.out.println("Sending board to Server");
+		System.out.println("CLIENT: Sending board to Server");
 		try {
 			out.writeObject(messageBoard);
 			out.flush();
+			out.reset();
 		} catch (IOException ex) {
-			System.err.println("Send error.");
+			System.err.println("CLIENT: Send error.");
 		}
 	}
 
@@ -79,7 +80,7 @@ public class SerialClient extends Network{
 			if (socket != null)
 				socket.close();
 		} catch (IOException ex) {
-			System.err.println("Error while closing conn.");
+			System.err.println("CLIENT: Error while closing conn.");
 		}
 	}
 }
