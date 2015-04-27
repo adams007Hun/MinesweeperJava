@@ -7,53 +7,51 @@ public class Control
 	private Network net;
 	private MinesweeperGui gui;
 	
-	private Board localBoard;
-	private Board remoteBoard;
-	
 	private static final int size = 15;
 	int mineCount = 40; // TODO: set from GUI
 
 	public Control()
 	{
-		localBoard = new Board(size, size, mineCount);
-		remoteBoard = new Board(size, size, mineCount);
-	}
-	
-	public Board getLocalBoard() {
-		return localBoard;
-	}
-
-	public Board getRemoteBoard() {
-		return remoteBoard;
 	}
 	
 	void setGUI(MinesweeperGui g) {
 		gui = g;
 	}
+	
+	public int getMineCount() {
+		return mineCount;
+	}
 
-	void startServer() {
+	public void setMineCount(int mineCount) {
+		this.mineCount = mineCount;
+	}
+
+	public void startServer() {
 		if (net != null)
 			net.disconnect();
 		net = new SerialServer(this);
 		net.connect("localhost");
 	}
 
-	void startClient() {
+	public void startClient(String ip) {
 		if (net != null)
 			net.disconnect();
 		net = new SerialClient(this);
 		net.connect("localhost");
 	}
 
-	void sendBoard(Board sendableBoard) {
+	public void sendBoard(Board sendableBoard) {
 		if (net == null)
 			return;
+		sendableBoard.Display();
 		net.sendBoard(sendableBoard);
 	}
 
-	void boardReceived(Board receivedBoard) {
+	public void boardReceived(Board receivedBoard) {
 		if (gui == null)
 			return;
+		receivedBoard.Display();
+		gui.updateRemoteBoard(receivedBoard);
 		System.out.println("Jipyyyy new board came, so fluffy");	/*TODO GUI kirajzol*/
 	}
 

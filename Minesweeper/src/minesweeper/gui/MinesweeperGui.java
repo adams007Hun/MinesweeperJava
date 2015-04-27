@@ -23,6 +23,7 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
+import minesweeper.Board;
 import minesweeper.Control;
 
 public class MinesweeperGui extends JFrame
@@ -30,8 +31,15 @@ public class MinesweeperGui extends JFrame
 
 	private static final long serialVersionUID = 1L;
 	private Control ctrl;
-	private int gameTime; // in seconds
+	private MineBoardPanel myBoard;
+	private MineBoardPanel enemyBoard;
 	
+	public Control getCtrl() {
+		return ctrl;
+	}
+
+	private int gameTime; // in seconds
+		
 	public MinesweeperGui(Control _ctrl)
 	{
 		super("Minesweeper");
@@ -53,7 +61,7 @@ public class MinesweeperGui extends JFrame
 		mntmNewGame.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NewGameDialog nd = new NewGameDialog(null);
+				NewGameDialog nd = new NewGameDialog(MinesweeperGui.this);
 				nd.setVisible(true);
 			}
 		});
@@ -76,7 +84,7 @@ public class MinesweeperGui extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "Minesweeper v0.5\n  ---Developers---  "
-						+ "\n Bányai Tamás\nDobiás Zoltán\nVirovecz Ádám");
+						+ "\n Bï¿½nyai Tamï¿½s\nDobiï¿½s Zoltï¿½n\nVirovecz ï¿½dï¿½m");
 			}
 		});
 		mnHelp.add(mntmAbout);
@@ -130,15 +138,16 @@ public class MinesweeperGui extends JFrame
 		panel.add(labelEnemy, "7, 1");
 		labelEnemy.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		
-		MineBoardPanel myBoard = new MineBoardPanel(true);
+		myBoard = new MineBoardPanel(ctrl, true);
 		myBoard.setPreferredSize(new Dimension(495, 230));
 		getContentPane().add(myBoard, "2, 4, fill, fill");
-		myBoard.setBoard(ctrl.getLocalBoard());
+		//myBoard.setBoard(ctrl.getLocalBoard());
+		//myBoard.setControl(ctrl);
 		
-		MineBoardPanel enemyBoard = new MineBoardPanel(false);
+		enemyBoard = new MineBoardPanel(ctrl, false);
 		enemyBoard.setPreferredSize(new Dimension(495, 230));
 		getContentPane().add(enemyBoard, "4, 4, fill, fill");
-		enemyBoard.setBoard(ctrl.getRemoteBoard());
+		//enemyBoard.setBoard(ctrl.getRemoteBoard());
 		
 		Timer gameTimer = new Timer(1000, new ActionListener()
 		{
@@ -154,6 +163,13 @@ public class MinesweeperGui extends JFrame
 		gameTimer.start();
 		
 		this.setVisible(true);
+	}
+	
+	public void updateRemoteBoard(Board received)
+	{
+		if (enemyBoard == null)
+			return;
+		enemyBoard.updateBoard(received);
 	}
 
 }

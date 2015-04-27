@@ -1,7 +1,5 @@
 package minesweeper.gui;
 
-import java.awt.Frame;
-
 import javax.swing.JDialog;
 
 import com.jgoodies.forms.layout.FormLayout;
@@ -34,7 +32,7 @@ public class NewGameDialog extends JDialog
 	
 	private static final String IPV4PATTERN = "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 	
-	public NewGameDialog(Frame frame)
+	public NewGameDialog(MinesweeperGui frame)
 	{
 		// Create a new dialog with the given title, and set the modality to true
 		super(frame, "Start new game...", true);
@@ -97,6 +95,7 @@ public class NewGameDialog extends JDialog
 		textField = new JTextField();
 		getContentPane().add(textField, "4, 12, fill, default");
 		textField.setColumns(10);
+		textField.setText("1.1.1.1");
 		
 		JLabel lblNewLabel = new JLabel("New label");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -115,8 +114,10 @@ public class NewGameDialog extends JDialog
 			public void actionPerformed(ActionEvent e) {
 				Pattern pattern = Pattern.compile(IPV4PATTERN);
 			    Matcher matcher = pattern.matcher(textField.getText());
-			    if (matcher.matches()) // TODO Connect client
+			    if (matcher.matches()) {
+			    	frame.getCtrl().startClient(textField.getText());
 			    	dispose();
+			    }
 			    else
 			    	JOptionPane.showMessageDialog(null, "Please enter a correct IPv4 address!");
 				
@@ -128,7 +129,8 @@ public class NewGameDialog extends JDialog
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Start server
+				frame.getCtrl().setMineCount((int)spinner.getModel().getValue());
+				frame.getCtrl().startServer();
 				dispose();
 			}
 		});

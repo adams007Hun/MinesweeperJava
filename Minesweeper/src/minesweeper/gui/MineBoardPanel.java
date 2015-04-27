@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import minesweeper.Board;
 import minesweeper.Cell;
 import minesweeper.CellState;
+import minesweeper.Control;
 
 
 public class MineBoardPanel extends JPanel
@@ -21,15 +22,29 @@ public class MineBoardPanel extends JPanel
 
 	private MineButton mineField[][];
 	private Board board;
+	private Control control;
+	private boolean playable;
 	
-	
-	public void setBoard(Board board) {
-		this.board = board;
+	public void updateBoard(Board received) {
+		if (board == null)
+			return;
+		board = received;
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < columns; j++)
+			{
+				mineField[i][j].updateButton(board.getCells()[i][j]);
+			}
+		}
+		return;
 	}
 
-	public MineBoardPanel(boolean playable)
+	public MineBoardPanel(Control _ctrl, boolean _playable)
 	{
 		super(new GridLayout(rows, columns, 0,0));
+		this.control = _ctrl;
+		this.board = new Board(15,15,control.getMineCount());
+		this.playable = _playable;
 		mineField = new MineButton[rows][columns];
 		this.setSize(rows*20, columns*20);
 		
@@ -75,13 +90,7 @@ public class MineBoardPanel extends JPanel
 				//System.out.print(r + " " + c + "\n");
 				if (clickedCell.getCellState() == CellState.Hidden) {
 					board.reveal(r, c);
-					for (int i = 0; i < rows; i++)
-					{
-						for (int j = 0; j < columns; j++)
-						{
-							mineField[i][j].updateButton(board.getCells()[i][j]);
-						}
-					}
+					updateBoard(board);
 					if (board.getWin())
 					{
 						JOptionPane.showMessageDialog(null, "You win the game! :)");
@@ -92,6 +101,7 @@ public class MineBoardPanel extends JPanel
 					}
 				}
 			}
+			control.sendBoard(board);
 		}
 		
 	}
