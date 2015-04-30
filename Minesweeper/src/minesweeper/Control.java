@@ -8,6 +8,8 @@ public class Control
 	private MinesweeperGui gui;
 	
 	private static final int size = 15;
+	
+
 	int mineCount = 40; // TODO: set from GUI
 
 	public Control()
@@ -16,6 +18,10 @@ public class Control
 	
 	void setGUI(MinesweeperGui g) {
 		gui = g;
+	}
+	
+	public static int getSize() {
+		return size;
 	}
 	
 	public int getMineCount() {
@@ -43,6 +49,7 @@ public class Control
 	public void sendBoard(Board sendableBoard) {
 		if (net == null)
 			return;
+		//sendableBoard.Display();
 		net.sendBoard(sendableBoard);
 	}
 
@@ -50,6 +57,7 @@ public class Control
 		if (gui == null)
 			return;
 		gui.updateRemoteBoard(receivedBoard);
+		//receivedBoard.Display();
 		System.out.println("Jipyyyy new board came, so fluffy");
 	}
 

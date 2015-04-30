@@ -115,7 +115,9 @@ public class NewGameDialog extends JDialog
 				Pattern pattern = Pattern.compile(IPV4PATTERN);
 			    Matcher matcher = pattern.matcher(textField.getText());
 			    if (matcher.matches()) {
-			    	frame.getCtrl().startClient(textField.getText());
+			    	//frame.getCtrl().startClient(textField.getText());
+			    	//frame.startGame();
+			    	frame.startClient(textField.getText());
 			    	dispose();
 			    }
 			    else
@@ -129,8 +131,10 @@ public class NewGameDialog extends JDialog
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frame.getCtrl().setMineCount((int)spinner.getModel().getValue());
-				frame.getCtrl().startServer();
+				frame.startServer((int)spinner.getModel().getValue());
+				//frame.getCtrl().setMineCount((int)spinner.getModel().getValue());
+				//frame.startGame();
+				//frame.getCtrl().startServer();
 				dispose();
 			}
 		});

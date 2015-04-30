@@ -32,6 +32,7 @@ public class MineButton extends JButton
 		{
 			case Hidden:
 				this.setText("");
+				this.setEnabled(true);
 				break;
 			case Clicked:
 				if(cell.getCellValue() == Cell.BOMB)
@@ -42,6 +43,7 @@ public class MineButton extends JButton
 				break;
 			case Flagged:
 				this.setText("#");
+				this.setEnabled(true);
 				break;
 			default:
 				break;

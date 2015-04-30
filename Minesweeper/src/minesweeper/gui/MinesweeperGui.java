@@ -9,10 +9,13 @@ import javax.swing.Timer;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 
 import java.awt.Font;
+import java.awt.GridLayout;
 
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -24,6 +27,8 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 
 import minesweeper.Board;
+import minesweeper.Cell;
+import minesweeper.CellState;
 import minesweeper.Control;
 
 public class MinesweeperGui extends JFrame
@@ -33,10 +38,9 @@ public class MinesweeperGui extends JFrame
 	private Control ctrl;
 	private MineBoardPanel myBoard;
 	private MineBoardPanel enemyBoard;
-	
-	public Control getCtrl() {
-		return ctrl;
-	}
+	private JLabel myMineCounter;
+	private JLabel enemyMineCounter;
+	private Timer gameTimer;
 
 	private int gameTime; // in seconds
 		
@@ -48,7 +52,6 @@ public class MinesweeperGui extends JFrame
 		
 		setSize(new Dimension(680, 420));
 		setMinimumSize(new Dimension(400, 400));
-		//this.setSize(640, 480);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -118,11 +121,11 @@ public class MinesweeperGui extends JFrame
 			new RowSpec[] {
 				RowSpec.decode("default:grow"),}));
 		
-		JLabel myMineCounter = new JLabel("40");
+		myMineCounter = new JLabel("40");
 		panel.add(myMineCounter, "1, 1");
 		myMineCounter.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		
-		JLabel enemyMineCounter = new JLabel("40");
+		enemyMineCounter = new JLabel("40");
 		panel.add(enemyMineCounter, "9, 1");
 		enemyMineCounter.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		
@@ -141,15 +144,12 @@ public class MinesweeperGui extends JFrame
 		myBoard = new MineBoardPanel(ctrl, true);
 		myBoard.setPreferredSize(new Dimension(495, 230));
 		getContentPane().add(myBoard, "2, 4, fill, fill");
-		//myBoard.setBoard(ctrl.getLocalBoard());
-		//myBoard.setControl(ctrl);
 		
 		enemyBoard = new MineBoardPanel(ctrl, false);
 		enemyBoard.setPreferredSize(new Dimension(495, 230));
 		getContentPane().add(enemyBoard, "4, 4, fill, fill");
-		//enemyBoard.setBoard(ctrl.getRemoteBoard());
 		
-		Timer gameTimer = new Timer(1000, new ActionListener()
+		gameTimer = new Timer(1000, new ActionListener()
 		{
 			
 			@Override
@@ -160,16 +160,178 @@ public class MinesweeperGui extends JFrame
 				
 			}
 		});
-		gameTimer.start();
 		
 		this.setVisible(true);
+	}
+
+	public void startClient(String ip)
+	{
+		// TODO minecount from server
+		ctrl.startClient(ip);
+		newGameBoardSetup();
+		myBoard.setUpBoard();
+		gameTimer.restart();
+	}
+	
+	public void startServer(int mineCount)
+	{
+		// TODO synchronize with client
+		ctrl.setMineCount(mineCount);
+		ctrl.startServer();
+		newGameBoardSetup();
+		myMineCounter.setText(Integer.toString(mineCount));
+		enemyMineCounter.setText(Integer.toString(mineCount));
+		myBoard.setUpBoard();
+		gameTimer.restart();
+	}
+	
+	private void newGameBoardSetup()
+	{
+		myBoard.resetBoard();
+		enemyBoard.resetBoard();
+		myBoard.playable = true;
 	}
 	
 	public void updateRemoteBoard(Board received)
 	{
 		if (enemyBoard == null)
 			return;
+		enemyMineCounter.setText(Integer.toString(received.getNumMines()-received.getNumFlagged()));
 		enemyBoard.updateBoard(received);
+		if (received.getWin())
+		{
+			gameTimer.stop();
+			myBoard.playable = false;
+			JOptionPane.showMessageDialog(null, "The enemy has won the game! :(");
+		}
+		else if (received.getDefeat())
+		{
+			gameTimer.stop();
+			myBoard.playable = false;
+			JOptionPane.showMessageDialog(null, "The enemy has blown up a mine. You win! :)");
+		}
 	}
+	
+	private class MineBoardPanel extends JPanel
+	{
+		private static final long serialVersionUID = 1L;
+
+		private MineButton mineField[][];
+		private Board board;
+		private Control control;
+		private boolean playable;
+		
+		private int rows;
+		private int columns;
+		
+		public MineBoardPanel(Control _ctrl, boolean _playable)
+		{
+			super(new GridLayout(Control.getSize(), Control.getSize(), 0,0));
+			this.control = _ctrl;
+			this.playable = _playable;
+			this.rows = Control.getSize();
+			this.columns = Control.getSize();
+			
+			resetBoard();
+		}
+		
+		public void updateBoard(Board received) {
+			board = received;
+			for (int i = 0; i < rows; i++)
+			{
+				for (int j = 0; j < columns; j++)
+				{
+					mineField[i][j].updateButton(board.getCellAt(i,j));
+				}
+			}
+			return;
+		}
+		
+		private void resetBoard()
+		{
+			removeAll();
+			revalidate();
+			repaint();   
+			mineField = new MineButton[rows][columns];
+			this.setSize(rows*20, columns*20);
+			
+			for (int i = 0; i < rows; i++)
+			{
+				for (int j = 0; j < columns; j++)
+				{
+					mineField[i][j] = new MineButton();
+					add(mineField[i][j]);
+				}
+			}
+		}
+		
+		public void setUpBoard()
+		{
+			this.board = new Board(15,15,control.getMineCount());
+			
+			for (int i = 0; i < rows; i++)
+			{
+				for (int j = 0; j < columns; j++)
+				{
+					mineField[i][j].updateButton(new Cell(CellState.Hidden, 0));
+					if (playable)
+						mineField[i][j].addMouseListener(new MouseHandler(i,j));
+				}
+			}
+		}
+
+		private class MouseHandler extends MouseAdapter
+		{
+			private int r,c;
+			public MouseHandler(int r, int c)
+		    {
+		        this.r = r;
+		        this.c = c;
+		    }
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (!board.getWin() && !board.getDefeat() && playable) {
+					super.mouseClicked(e);
+					Cell clickedCell = board.getCellAt(r,c);
+					if (e.getButton() == MouseEvent.BUTTON3)
+					{
+						if (clickedCell.getCellState() == CellState.Hidden) {
+							board.flag(r, c);
+							((MineButton)e.getSource()).updateButton(clickedCell);
+						}
+						else if (clickedCell.getCellState() == CellState.Flagged) {
+							board.unFlag(r,c);
+							((MineButton)e.getSource()).updateButton(clickedCell);
+						}
+						myMineCounter.setText(Integer.toString(board.getNumMines()-board.getNumFlagged()));
+						control.sendBoard(board); 
+					}
+					else
+					{
+						// Debug only message
+						//System.out.print(r + " " + c + "\n");
+						if (clickedCell.getCellState() == CellState.Hidden) {
+							board.reveal(r, c);
+							updateBoard(board);
+							control.sendBoard(board); 
+							if (board.getWin())
+							{
+								gameTimer.stop();
+								JOptionPane.showMessageDialog(null, "You win the game! :)");
+							}
+							else if (board.getDefeat())
+							{
+								gameTimer.stop();
+								JOptionPane.showMessageDialog(null, "You lost the game! :(");
+							}
+						}
+					}
+				}
+			}
+			
+		}
+	}
+
 
 }

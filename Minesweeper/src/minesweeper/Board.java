@@ -21,17 +21,6 @@ public class Board implements Serializable{
 	// The board
 	private Cell [][] cells;
 	
-	// Ádám -- Debug
-	//---------------
-	public Cell[][] getCells() {
-		return cells;
-	}
-	
-	public Cell getCellAt(int row, int column) {
-		return cells[row][column];
-	}
-	//---------------
-	
 	// Number of mines, flagged, hidden
 	private int numMines;
 	private int numFlagged;
@@ -259,6 +248,14 @@ public class Board implements Serializable{
 	}
 	public void setNumHidden(int numHidden){
 		this.numHidden = numHidden;
+	}
+	
+	public Cell[][] getCells() {
+		return cells;
+	}
+	
+	public Cell getCellAt(int row, int column) {
+		return cells[row][column];
 	}
 
 	/*---------------------------*/
