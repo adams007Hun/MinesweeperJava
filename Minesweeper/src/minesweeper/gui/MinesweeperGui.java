@@ -170,19 +170,21 @@ public class MinesweeperGui extends JFrame
 		// TODO minecount from server
 		ctrl.startClient(ip);
 		newGameBoardSetup();
+		myMineCounter.setText(Integer.toString(ctrl.getMineCount()));
+		enemyMineCounter.setText(Integer.toString(ctrl.getMineCount()));
 	}
 	
 	public void startServer(int mineCount)
 	{
 		ctrl.setMineCount(mineCount);
 		ctrl.startServer();
+		myMineCounter.setText(Integer.toString(ctrl.getMineCount()));
+		enemyMineCounter.setText(Integer.toString(ctrl.getMineCount()));
 	}
 	
 	public void clientConnectedToServer()
 	{
 		newGameBoardSetup();
-		myMineCounter.setText(Integer.toString(ctrl.getMineCount()));
-		enemyMineCounter.setText(Integer.toString(ctrl.getMineCount()));
 	}
 	
 	private void newGameBoardSetup()
