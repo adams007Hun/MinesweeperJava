@@ -13,6 +13,7 @@ public class SerialClient extends Network{
 	private Socket socket = null;
 	private ObjectOutputStream out = null;
 	private ObjectInputStream in = null;
+	private ObjectInputStream inMineNum = null;
 
 	SerialClient(Control ctrl) {
 		super(ctrl);
@@ -45,6 +46,9 @@ public class SerialClient extends Network{
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
 			out.flush();
+			inMineNum = new ObjectInputStream(socket.getInputStream());
+			int GameMineNum = inMineNum.readInt();
+			ctrl.setMineCount(GameMineNum);
 
 			Thread rec = new Thread(new ReceiverThread());
 			rec.start();
@@ -77,6 +81,8 @@ public class SerialClient extends Network{
 				out.close();
 			if (in != null)
 				in.close();
+			if (inMineNum != null)
+				inMineNum.close();
 			if (socket != null)
 				socket.close();
 		} catch (IOException ex) {

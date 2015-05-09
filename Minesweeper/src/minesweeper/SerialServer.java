@@ -13,6 +13,7 @@ public class SerialServer extends Network{
 	private Socket clientSocket = null;
 	private ObjectOutputStream out = null;
 	private ObjectInputStream in = null;
+	private ObjectOutputStream outMineNum = null;
 
 	SerialServer(Control ctrl) {
 		super(ctrl);
@@ -36,6 +37,9 @@ public class SerialServer extends Network{
 				out = new ObjectOutputStream(clientSocket.getOutputStream());
 				in = new ObjectInputStream(clientSocket.getInputStream());
 				out.flush();
+				outMineNum = new ObjectOutputStream(clientSocket.getOutputStream());
+				outMineNum.writeInt(ctrl.getMineCount());
+				outMineNum.flush();
 			} catch (IOException e) {
 				System.err.println("SERVER: Error while getting streams.");
 				disconnect();
@@ -88,6 +92,8 @@ public class SerialServer extends Network{
 		try {
 			if (out != null)
 				out.close();
+			if (outMineNum != null)
+				outMineNum.close();
 			if (in != null)
 				in.close();
 			if (clientSocket != null)
