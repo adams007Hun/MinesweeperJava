@@ -43,8 +43,8 @@ public class Control
 		if (net != null)
 			net.disconnect();
 		net = new SerialClient(this);
-		//return net.connect("localhost");
-		return net.connect("ip");
+		return net.connect("localhost");
+		//return net.connect("ip");
 	}
 
 	public void sendBoard(Board sendableBoard) {
