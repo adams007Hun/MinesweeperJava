@@ -67,7 +67,7 @@ public class Control
 	
 	public void DisconnectionOccured()
 	{
-		
+		gui.disconnectionOccured();
 	}
 
 }

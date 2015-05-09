@@ -188,6 +188,12 @@ public class MinesweeperGui extends JFrame
 		newGameBoardSetup();
 	}
 	
+	public void disconnectionOccured()
+	{
+		myBoard.playable = false;
+		gameTimer.stop();
+	}
+	
 	private void newGameBoardSetup()
 	{
 		myBoard.resetBoard();
