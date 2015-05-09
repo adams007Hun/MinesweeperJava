@@ -31,6 +31,8 @@ public class SerialClient extends Network{
 			} catch (Exception ex) {
 				System.err.println(ex.getMessage());
 				System.err.println("CLIENT: Server disconnected!");
+				JOptionPane.showMessageDialog(null, "CLIENT: Server disconnected!");
+				ctrl.DisconnectionOccured();
 			} finally {
 				disconnect();
 			}

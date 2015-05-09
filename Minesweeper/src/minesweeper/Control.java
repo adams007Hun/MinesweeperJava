@@ -64,5 +64,10 @@ public class Control
 	{
 		gui.clientConnectedToServer();
 	}
+	
+	public void DisconnectionOccured()
+	{
+		
+	}
 
 }

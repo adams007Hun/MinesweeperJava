@@ -58,6 +58,8 @@ public class SerialServer extends Network{
 			} catch (Exception ex) {
 				System.err.println(ex.getMessage());
 				System.err.println("SERVER: Client disconnected!");
+				JOptionPane.showMessageDialog(null, "SERVER: Client disconnected!");
+				ctrl.DisconnectionOccured();
 			} finally {
 				disconnect();
 			}
