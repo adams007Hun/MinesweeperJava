@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JOptionPane;
+
 public class SerialServer extends Network{
 	private ServerSocket serverSocket = null;
 	private Socket clientSocket = null;
@@ -23,12 +25,13 @@ public class SerialServer extends Network{
 
 		public void run() {
 			try {
-				System.out.println("SERVER: Waiting for Client");
+				//System.out.println("SERVER: Waiting for Client");
 				clientSocket = serverSocket.accept();
 				ctrl.clientConnected();
-				System.out.println("SERVER: Client connected.");
+				//System.out.println("SERVER: Client connected.");
 			} catch (IOException e) {
 				System.err.println("SERVER: Accept failed.");
+				JOptionPane.showMessageDialog(null, "SERVER: Accept failed!");
 				disconnect();
 				return;
 			}
@@ -42,6 +45,7 @@ public class SerialServer extends Network{
 				outMineNum.flush();
 			} catch (IOException e) {
 				System.err.println("SERVER: Error while getting streams.");
+				JOptionPane.showMessageDialog(null, "SERVER: Getting streams failed!");
 				disconnect();
 				return;
 			}
@@ -52,7 +56,7 @@ public class SerialServer extends Network{
 					ctrl.boardReceived(received);
 				}
 			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
+				System.err.println(ex.getMessage());
 				System.err.println("SERVER: Client disconnected!");
 			} finally {
 				disconnect();
@@ -61,15 +65,18 @@ public class SerialServer extends Network{
 	}
 
 	@Override
-	void connect(String ip) {
+	int connect(String ip) {
 		disconnect();
 		try {
 			serverSocket = new ServerSocket(10007);
 
 			Thread rec = new Thread(new ReceiverThread());
 			rec.start();
+			return 0;
 		} catch (IOException e) {
 			System.err.println("SERVER: Could not listen on port: 10007.");
+			JOptionPane.showMessageDialog(null, "SERVER: Could not listen on port: 10007!");
+			return 2;
 		}
 	}
 
@@ -77,13 +84,14 @@ public class SerialServer extends Network{
 	void sendBoard(Board messageBoard) {
 		if (out == null)
 			return;
-		System.out.println("SERVER: Sending a board to Client");
+		//System.out.println("SERVER: Sending a board to Client");
 		try {
 			out.writeObject(messageBoard);
 			out.flush();
 			out.reset();
 		} catch (IOException ex) {
 			System.err.println("SERVER: Send error.");
+			JOptionPane.showMessageDialog(null, "SERVER: Error during send!");
 		}
 	}
 

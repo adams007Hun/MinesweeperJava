@@ -32,24 +32,24 @@ public class Control
 		this.mineCount = mineCount;
 	}
 
-	public void startServer() {
+	public int startServer() {
 		if (net != null)
 			net.disconnect();
 		net = new SerialServer(this);
-		net.connect("localhost");
+		return net.connect("localhost");
 	}
 
-	public void startClient(String ip) {
+	public int startClient(String ip) {
 		if (net != null)
 			net.disconnect();
 		net = new SerialClient(this);
-		net.connect("localhost");
+		//return net.connect("localhost");
+		return net.connect("ip");
 	}
 
 	public void sendBoard(Board sendableBoard) {
 		if (net == null)
 			return;
-		//sendableBoard.Display();
 		net.sendBoard(sendableBoard);
 	}
 
@@ -57,7 +57,6 @@ public class Control
 		if (gui == null)
 			return;
 		gui.updateRemoteBoard(receivedBoard);
-		//receivedBoard.Display();
 		System.out.println("Jipyyyy new board came, so fluffy");
 	}
 	

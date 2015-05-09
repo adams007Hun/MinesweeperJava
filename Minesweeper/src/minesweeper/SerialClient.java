@@ -22,14 +22,14 @@ public class SerialClient extends Network{
 	private class ReceiverThread implements Runnable {
 
 		public void run() {
-			System.out.println("CLIENT: Waiting for message...");
+			//System.out.println("CLIENT: Waiting for message...");
 			try {
 				while (true) {
 					Board received = (Board) in.readObject();
 					ctrl.boardReceived(received);
 				}
 			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
+				System.err.println(ex.getMessage());
 				System.err.println("CLIENT: Server disconnected!");
 			} finally {
 				disconnect();
@@ -38,7 +38,7 @@ public class SerialClient extends Network{
 	}
 
 	@Override
-	void connect(String ip) {
+	int connect(String ip) {
 		disconnect();
 		try {
 			socket = new Socket(ip, 10007);
@@ -52,11 +52,15 @@ public class SerialClient extends Network{
 
 			Thread rec = new Thread(new ReceiverThread());
 			rec.start();
+			return 0;
 		} catch (UnknownHostException e) {
 			System.err.println("CLIENT: Don't know about host");
+			JOptionPane.showMessageDialog(null, "CLIENT: Cannot find server!");
+			return 1;
 		} catch (IOException e) {
 			System.err.println("CLIENT: Couldn't get I/O for the connection. ");
-			JOptionPane.showMessageDialog(null, "CLIENT: Cannot connect to server!");
+			JOptionPane.showMessageDialog(null, "CLIENT: Cannot connect to server with IO!");
+			return 2;
 		}
 	}
 
@@ -64,13 +68,14 @@ public class SerialClient extends Network{
 	void sendBoard(Board messageBoard) {
 		if (out == null)
 			return;
-		System.out.println("CLIENT: Sending board to Server");
+		//System.out.println("CLIENT: Sending board to Server");
 		try {
 			out.writeObject(messageBoard);
 			out.flush();
 			out.reset();
 		} catch (IOException ex) {
 			System.err.println("CLIENT: Send error.");
+			JOptionPane.showMessageDialog(null, "CLIENT: Error during send!");
 		}
 	}
 
@@ -87,6 +92,7 @@ public class SerialClient extends Network{
 				socket.close();
 		} catch (IOException ex) {
 			System.err.println("CLIENT: Error while closing conn.");
+			JOptionPane.showMessageDialog(null, "CLIENT: Error while closing connection!");
 		}
 	}
 }
