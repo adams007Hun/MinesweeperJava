@@ -24,6 +24,7 @@ public class SerialServer extends Network{
 			try {
 				System.out.println("SERVER: Waiting for Client");
 				clientSocket = serverSocket.accept();
+				ctrl.clientConnected();
 				System.out.println("SERVER: Client connected.");
 			} catch (IOException e) {
 				System.err.println("SERVER: Accept failed.");

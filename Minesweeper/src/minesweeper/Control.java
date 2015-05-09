@@ -60,5 +60,10 @@ public class Control
 		//receivedBoard.Display();
 		System.out.println("Jipyyyy new board came, so fluffy");
 	}
+	
+	public void clientConnected()
+	{
+		gui.clientConnectedToServer();
+	}
 
 }

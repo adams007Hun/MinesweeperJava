@@ -41,6 +41,7 @@ public class MinesweeperGui extends JFrame
 	private JLabel myMineCounter;
 	private JLabel enemyMineCounter;
 	private Timer gameTimer;
+	private JLabel globalTimer;
 
 	private int gameTime; // in seconds
 		
@@ -129,7 +130,7 @@ public class MinesweeperGui extends JFrame
 		panel.add(enemyMineCounter, "9, 1");
 		enemyMineCounter.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		
-		JLabel globalTimer = new JLabel("00:00");
+		globalTimer = new JLabel("00:00");
 		panel.add(globalTimer, "5, 1");
 		globalTimer.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		
@@ -169,20 +170,19 @@ public class MinesweeperGui extends JFrame
 		// TODO minecount from server
 		ctrl.startClient(ip);
 		newGameBoardSetup();
-		myBoard.setUpBoard();
-		gameTimer.restart();
 	}
 	
 	public void startServer(int mineCount)
 	{
-		// TODO synchronize with client
 		ctrl.setMineCount(mineCount);
 		ctrl.startServer();
+	}
+	
+	public void clientConnectedToServer()
+	{
 		newGameBoardSetup();
-		myMineCounter.setText(Integer.toString(mineCount));
-		enemyMineCounter.setText(Integer.toString(mineCount));
-		myBoard.setUpBoard();
-		gameTimer.restart();
+		myMineCounter.setText(Integer.toString(ctrl.getMineCount()));
+		enemyMineCounter.setText(Integer.toString(ctrl.getMineCount()));
 	}
 	
 	private void newGameBoardSetup()
@@ -190,6 +190,10 @@ public class MinesweeperGui extends JFrame
 		myBoard.resetBoard();
 		enemyBoard.resetBoard();
 		myBoard.playable = true;
+		myBoard.setUpBoard();
+		gameTime = 0;
+		globalTimer.setText(String.format("%02d:%02d", gameTime/60, gameTime%60));
+		gameTimer.restart();
 	}
 	
 	public void updateRemoteBoard(Board received)
