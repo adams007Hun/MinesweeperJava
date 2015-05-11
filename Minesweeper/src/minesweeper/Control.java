@@ -10,7 +10,7 @@ public class Control
 	private static final int size = 15;
 	
 
-	int mineCount = 40; // TODO: set from GUI
+	int mineCount = 40;
 
 	public Control()
 	{

@@ -30,7 +30,6 @@ public class SerialServer extends Network{
 				ctrl.clientConnected();
 				//System.out.println("SERVER: Client connected.");
 			} catch (IOException e) {
-				System.err.println("SERVER: Accept failed.");
 				JOptionPane.showMessageDialog(null, "SERVER: Accept failed!");
 				disconnect();
 				return;
@@ -44,7 +43,6 @@ public class SerialServer extends Network{
 				outMineNum.writeInt(ctrl.getMineCount());
 				outMineNum.flush();
 			} catch (IOException e) {
-				System.err.println("SERVER: Error while getting streams.");
 				JOptionPane.showMessageDialog(null, "SERVER: Getting streams failed!");
 				disconnect();
 				return;
@@ -56,8 +54,7 @@ public class SerialServer extends Network{
 					ctrl.boardReceived(received);
 				}
 			} catch (Exception ex) {
-				System.err.println(ex.getMessage());
-				System.err.println("SERVER: Client disconnected!");
+				//System.err.println(ex.getMessage());
 				JOptionPane.showMessageDialog(null, "SERVER: Client disconnected!");
 				ctrl.DisconnectionOccured();
 			} finally {
@@ -76,7 +73,6 @@ public class SerialServer extends Network{
 			rec.start();
 			return 0;
 		} catch (IOException e) {
-			System.err.println("SERVER: Could not listen on port: 10007.");
 			JOptionPane.showMessageDialog(null, "SERVER: Could not listen on port: 10007!");
 			return 2;
 		}
@@ -92,7 +88,6 @@ public class SerialServer extends Network{
 			out.flush();
 			out.reset();
 		} catch (IOException ex) {
-			System.err.println("SERVER: Send error.");
 			JOptionPane.showMessageDialog(null, "SERVER: Error during send!");
 		}
 	}

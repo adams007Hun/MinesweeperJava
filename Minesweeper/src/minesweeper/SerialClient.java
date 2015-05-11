@@ -29,8 +29,7 @@ public class SerialClient extends Network{
 					ctrl.boardReceived(received);
 				}
 			} catch (Exception ex) {
-				System.err.println(ex.getMessage());
-				System.err.println("CLIENT: Server disconnected!");
+				//System.err.println(ex.getMessage());
 				JOptionPane.showMessageDialog(null, "CLIENT: Server disconnected!");
 				ctrl.DisconnectionOccured();
 			} finally {
@@ -56,11 +55,9 @@ public class SerialClient extends Network{
 			rec.start();
 			return 0;
 		} catch (UnknownHostException e) {
-			System.err.println("CLIENT: Don't know about host");
 			JOptionPane.showMessageDialog(null, "CLIENT: Cannot find server!");
 			return 1;
 		} catch (IOException e) {
-			System.err.println("CLIENT: Couldn't get I/O for the connection. ");
 			JOptionPane.showMessageDialog(null, "CLIENT: Cannot connect to server with IO!");
 			return 2;
 		}
@@ -76,7 +73,6 @@ public class SerialClient extends Network{
 			out.flush();
 			out.reset();
 		} catch (IOException ex) {
-			System.err.println("CLIENT: Send error.");
 			JOptionPane.showMessageDialog(null, "CLIENT: Error during send!");
 		}
 	}
@@ -93,7 +89,6 @@ public class SerialClient extends Network{
 			if (socket != null)
 				socket.close();
 		} catch (IOException ex) {
-			System.err.println("CLIENT: Error while closing conn.");
 			JOptionPane.showMessageDialog(null, "CLIENT: Error while closing connection!");
 		}
 	}
