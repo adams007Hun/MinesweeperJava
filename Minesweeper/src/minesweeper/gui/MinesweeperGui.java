@@ -142,11 +142,11 @@ public class MinesweeperGui extends JFrame
 		panel.add(labelEnemy, "7, 1");
 		labelEnemy.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		
-		myBoard = new MineBoardPanel(ctrl, true);
+		myBoard = new MineBoardPanel(true);
 		myBoard.setPreferredSize(new Dimension(495, 230));
 		getContentPane().add(myBoard, "2, 4, fill, fill");
 		
-		enemyBoard = new MineBoardPanel(ctrl, false);
+		enemyBoard = new MineBoardPanel(false);
 		enemyBoard.setPreferredSize(new Dimension(495, 230));
 		getContentPane().add(enemyBoard, "4, 4, fill, fill");
 		
@@ -231,16 +231,14 @@ public class MinesweeperGui extends JFrame
 
 		private MineButton mineField[][];
 		private Board board;
-		private Control control;
 		private boolean playable;
 		
 		private int rows;
 		private int columns;
 		
-		public MineBoardPanel(Control _ctrl, boolean _playable)
+		public MineBoardPanel(boolean _playable)
 		{
 			super(new GridLayout(Control.getSize(), Control.getSize(), 0,0));
-			this.control = _ctrl;
 			this.playable = _playable;
 			this.rows = Control.getSize();
 			this.columns = Control.getSize();
@@ -280,7 +278,7 @@ public class MinesweeperGui extends JFrame
 		
 		public void setUpBoard()
 		{
-			this.board = new Board(15,15,control.getMineCount());
+			this.board = new Board(15,15,ctrl.getMineCount());
 			
 			for (int i = 0; i < rows; i++)
 			{
@@ -318,7 +316,7 @@ public class MinesweeperGui extends JFrame
 							((MineButton)e.getSource()).updateButton(clickedCell);
 						}
 						myMineCounter.setText(Integer.toString(board.getNumMines()-board.getNumFlagged()));
-						control.sendBoard(board); 
+						ctrl.sendBoard(board); 
 					}
 					else
 					{
@@ -327,7 +325,7 @@ public class MinesweeperGui extends JFrame
 						if (clickedCell.getCellState() == CellState.Hidden) {
 							board.reveal(r, c);
 							updateBoard(board);
-							control.sendBoard(board); 
+							ctrl.sendBoard(board); 
 							if (board.getWin())
 							{
 								gameTimer.stop();
